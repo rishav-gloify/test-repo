@@ -8,9 +8,12 @@
         <h1 class="h3 mb-1">Issued Books</h1>
         <p class="text-muted mb-0">Track active and returned books.</p>
     </div>
-    {% if user.is_librarian %}
-        <a class="btn btn-primary" href="{% url 'transactions:issue' %}">Issue Book</a>
-    {% endif %}
+    <div class="d-flex flex-wrap gap-2">
+        <a class="btn btn-outline-primary" href="{% url 'transactions:issued_export' %}">Export CSV</a>
+        {% if user.is_librarian %}
+            <a class="btn btn-primary" href="{% url 'transactions:issue' %}">Issue Book</a>
+        {% endif %}
+    </div>
 </div>
 
 <div class="card">

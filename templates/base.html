@@ -22,6 +22,7 @@
                     <li class="nav-item"><a class="nav-link" href="{% url 'books:list' %}">Books</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'transactions:issued' %}">Issued Books</a></li>
                     {% if user.is_librarian %}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'books:authors' %}">Authors</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'transactions:issue' %}">Issue Book</a></li>
                     {% endif %}
                 </ul>

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Delete Author | Library Management System{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="card border-danger">
+            <div class="card-body p-4">
+                <h1 class="h4 mb-3">Delete Author</h1>
+                <p>Are you sure you want to delete <strong>{{ object.name }}</strong>?</p>
+                <form method="post">
+                    {% csrf_token %}
+                    <button class="btn btn-danger" type="submit">Delete</button>
+                    <a class="btn btn-outline-secondary" href="{% url 'books:authors' %}">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

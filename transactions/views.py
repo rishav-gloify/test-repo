@@ -1,6 +1,9 @@
+import csv
+
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.core.exceptions import PermissionDenied
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views import View
@@ -35,7 +38,7 @@ class IssuedBooksView(LoginRequiredMixin, ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        queryset = IssueRecord.objects.select_related("book", "student")
+        queryset = IssueRecord.objects.select_related("book__author", "student")
         if self.request.user.is_librarian:
             return queryset
         return queryset.filter(student=self.request.user)
@@ -49,3 +52,39 @@ class ReturnBookView(LoginRequiredMixin, View):
         record.mark_returned()
         messages.success(request, "Book returned successfully.")
         return redirect("transactions:issued")
+
+
+class IssuedBooksExportView(LoginRequiredMixin, View):
+    def get(self, request):
+        queryset = IssueRecord.objects.select_related("book__author", "student")
+        if not request.user.is_librarian:
+            queryset = queryset.filter(student=request.user)
+
+        response = HttpResponse(content_type="text/csv")
+        response["Content-Disposition"] = 'attachment; filename="issued_books.csv"'
+
+        writer = csv.writer(response)
+        writer.writerow(
+            [
+                "Book",
+                "Author",
+                "ISBN",
+                "Student",
+                "Issue Date",
+                "Return Date",
+                "Status",
+            ]
+        )
+        for record in queryset:
+            writer.writerow(
+                [
+                    record.book.title,
+                    record.book.author.name,
+                    record.book.isbn,
+                    record.student.username,
+                    record.issue_date,
+                    record.return_date or "",
+                    "Returned" if record.is_returned else "Issued",
+                ]
+            )
+        return response

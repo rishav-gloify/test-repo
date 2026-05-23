@@ -3,13 +3,14 @@ from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
 from accounts.api import UserViewSet
-from books.api import BookViewSet
+from books.api import AuthorViewSet, BookViewSet
 from library_management_system.views import dashboard
 from transactions.api import IssueRecordViewSet
 
 
 router = DefaultRouter()
 router.register("books", BookViewSet, basename="api-books")
+router.register("authors", AuthorViewSet, basename="api-authors")
 router.register("users", UserViewSet, basename="api-users")
 router.register("issues", IssueRecordViewSet, basename="api-issues")
 

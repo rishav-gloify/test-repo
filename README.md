@@ -8,9 +8,11 @@ A simple, professional monolithic Django project for managing a library catalog,
 - Admin and Student roles
 - Dashboard with total books, issued books, available copies, and registered users
 - Admin book management: add, edit, and delete books
+- Author management with searchable author selection while adding books
 - Book issue and return workflow
 - Student view for issued books
 - Search books by title, author, category, or ISBN
+- CSV exports for books and issue records
 - Pagination on book and issue listings
 - REST APIs for books, users, and issue records using Django REST Framework
 - PostgreSQL database configuration

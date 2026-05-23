@@ -8,14 +8,26 @@
         <h1 class="h3 mb-1">Books</h1>
         <p class="text-muted mb-0">Search and manage the library catalog.</p>
     </div>
-    {% if user.is_librarian %}
-        <a class="btn btn-primary" href="{% url 'books:add' %}">Add Book</a>
-    {% endif %}
+    <div class="d-flex flex-wrap gap-2">
+        <a class="btn btn-outline-primary" href="{% url 'books:export' %}?q={{ query|urlencode }}&author={{ selected_author }}">Export CSV</a>
+        {% if user.is_librarian %}
+            <a class="btn btn-outline-secondary" href="{% url 'books:authors' %}">Authors</a>
+            <a class="btn btn-primary" href="{% url 'books:add' %}">Add Book</a>
+        {% endif %}
+    </div>
 </div>
 
 <form class="row g-2 mb-4" method="get">
-    <div class="col-md-10">
+    <div class="col-md-6">
         <input class="form-control" type="search" name="q" value="{{ query }}" placeholder="Search by title, author, category, or ISBN">
+    </div>
+    <div class="col-md-4">
+        <select class="form-select" name="author">
+            <option value="">All authors</option>
+            {% for author in authors %}
+                <option value="{{ author.pk }}" {% if author.pk|stringformat:"s" == selected_author %}selected{% endif %}>{{ author.name }}</option>
+            {% endfor %}
+        </select>
     </div>
     <div class="col-md-2 d-grid">
         <button class="btn btn-outline-primary" type="submit">Search</button>
@@ -41,7 +53,7 @@
             {% for book in books %}
                 <tr>
                     <td class="fw-semibold">{{ book.title }}</td>
-                    <td>{{ book.author }}</td>
+                    <td>{{ book.author.name }}</td>
                     <td>{{ book.isbn }}</td>
                     <td>{{ book.category }}</td>
                     <td>{{ book.quantity }}</td>
@@ -72,11 +84,11 @@
     <nav class="mt-4" aria-label="Book pagination">
         <ul class="pagination justify-content-center">
             {% if page_obj.has_previous %}
-                <li class="page-item"><a class="page-link" href="?q={{ query }}&page={{ page_obj.previous_page_number }}">Previous</a></li>
+                <li class="page-item"><a class="page-link" href="?q={{ query|urlencode }}&author={{ selected_author }}&page={{ page_obj.previous_page_number }}">Previous</a></li>
             {% endif %}
             <li class="page-item active"><span class="page-link">{{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span></li>
             {% if page_obj.has_next %}
-                <li class="page-item"><a class="page-link" href="?q={{ query }}&page={{ page_obj.next_page_number }}">Next</a></li>
+                <li class="page-item"><a class="page-link" href="?q={{ query|urlencode }}&author={{ selected_author }}&page={{ page_obj.next_page_number }}">Next</a></li>
             {% endif %}
         </ul>
     </nav>

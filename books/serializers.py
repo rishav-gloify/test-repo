@@ -1,11 +1,19 @@
 from rest_framework import serializers
 
-from books.models import Book
+from books.models import Author, Book
+
+
+class AuthorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Author
+        fields = ("id", "name", "created_at")
+        read_only_fields = ("id", "created_at")
 
 
 class BookSerializer(serializers.ModelSerializer):
     available_copies = serializers.IntegerField(read_only=True)
     active_issue_count = serializers.IntegerField(read_only=True)
+    author_name = serializers.CharField(source="author.name", read_only=True)
 
     class Meta:
         model = Book
@@ -13,6 +21,7 @@ class BookSerializer(serializers.ModelSerializer):
             "id",
             "title",
             "author",
+            "author_name",
             "isbn",
             "category",
             "quantity",

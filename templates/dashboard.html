@@ -12,7 +12,7 @@
 </div>
 
 <div class="row g-3">
-    <div class="col-12 col-md-6 col-xl-3">
+    <div class="col-12 col-md-6 {% if user.is_librarian %}col-xl-3{% else %}col-xl-4{% endif %}">
         <div class="card stat-card h-100">
             <div class="card-body">
                 <p class="text-muted text-uppercase small mb-2">Total Books</p>
@@ -20,15 +20,15 @@
             </div>
         </div>
     </div>
-    <div class="col-12 col-md-6 col-xl-3">
+    <div class="col-12 col-md-6 {% if user.is_librarian %}col-xl-3{% else %}col-xl-4{% endif %}">
         <div class="card stat-card h-100">
             <div class="card-body">
-                <p class="text-muted text-uppercase small mb-2">Issued Books</p>
+                <p class="text-muted text-uppercase small mb-2">{% if user.is_librarian %}Issued Books{% else %}My Issued Books{% endif %}</p>
                 <h2 class="mb-0">{{ issued_books }}</h2>
             </div>
         </div>
     </div>
-    <div class="col-12 col-md-6 col-xl-3">
+    <div class="col-12 col-md-6 {% if user.is_librarian %}col-xl-3{% else %}col-xl-4{% endif %}">
         <div class="card stat-card h-100">
             <div class="card-body">
                 <p class="text-muted text-uppercase small mb-2">Available Copies</p>
@@ -36,13 +36,15 @@
             </div>
         </div>
     </div>
-    <div class="col-12 col-md-6 col-xl-3">
-        <div class="card stat-card h-100">
-            <div class="card-body">
-                <p class="text-muted text-uppercase small mb-2">Registered Users</p>
-                <h2 class="mb-0">{{ registered_users }}</h2>
+    {% if user.is_librarian %}
+        <div class="col-12 col-md-6 col-xl-3">
+            <div class="card stat-card h-100">
+                <div class="card-body">
+                    <p class="text-muted text-uppercase small mb-2">Registered Users</p>
+                    <h2 class="mb-0">{{ registered_users }}</h2>
+                </div>
             </div>
         </div>
-    </div>
+    {% endif %}
 </div>
 {% endblock %}
