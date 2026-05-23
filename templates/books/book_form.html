@@ -20,9 +20,6 @@
                         {% for field in form %}
                             <div class="col-md-6">
                                 <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                {% if field.name == "author" %}
-                                    <input class="form-control form-control-sm mb-2" type="search" id="authorFilter" placeholder="Search author">
-                                {% endif %}
                                 {{ field }}
                                 <div class="text-danger small">{{ field.errors }}</div>
                             </div>
@@ -37,28 +34,4 @@
         </div>
     </div>
 </div>
-
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    const filter = document.getElementById("authorFilter");
-    const select = document.querySelector(".searchable-author-select");
-    if (!filter || !select) {
-        return;
-    }
-
-    const options = Array.from(select.options).map(function (option) {
-        return {
-            element: option,
-            label: option.textContent.toLowerCase()
-        };
-    });
-
-    filter.addEventListener("input", function () {
-        const value = filter.value.trim().toLowerCase();
-        options.forEach(function (option) {
-            option.element.hidden = value && !option.label.includes(value);
-        });
-    });
-});
-</script>
 {% endblock %}

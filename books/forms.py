@@ -20,7 +20,7 @@ class BookForm(forms.ModelForm):
         fields = ("title", "author", "isbn", "category", "quantity")
         widgets = {
             "title": forms.TextInput(attrs={"class": "form-control"}),
-            "author": forms.Select(attrs={"class": "form-select searchable-author-select"}),
+            "author": forms.Select(attrs={"class": "form-select"}),
             "isbn": forms.TextInput(attrs={"class": "form-control"}),
             "category": forms.TextInput(attrs={"class": "form-control"}),
             "quantity": forms.NumberInput(attrs={"class": "form-control", "min": 0}),
