@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}Issued Books | Library Management System{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+    <div>
+        <h1 class="h3 mb-1">Issued Books</h1>
+        <p class="text-muted mb-0">Track active and returned books.</p>
+    </div>
+    {% if user.is_librarian %}
+        <a class="btn btn-primary" href="{% url 'transactions:issue' %}">Issue Book</a>
+    {% endif %}
+</div>
+
+<div class="card">
+    <div class="table-responsive">
+        <table class="table align-middle mb-0">
+            <thead class="table-light">
+            <tr>
+                <th>Book</th>
+                <th>Student</th>
+                <th>Issue Date</th>
+                <th>Return Date</th>
+                <th>Status</th>
+                <th class="text-end">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for record in records %}
+                <tr>
+                    <td class="fw-semibold">{{ record.book.title }}</td>
+                    <td>{{ record.student.username }}</td>
+                    <td>{{ record.issue_date }}</td>
+                    <td>{{ record.return_date|default:"-" }}</td>
+                    <td>
+                        <span class="badge {% if record.is_returned %}text-bg-secondary{% else %}text-bg-warning{% endif %}">
+                            {% if record.is_returned %}Returned{% else %}Issued{% endif %}
+                        </span>
+                    </td>
+                    <td class="text-end">
+                        {% if not record.is_returned %}
+                            <form method="post" action="{% url 'transactions:return' record.pk %}">
+                                {% csrf_token %}
+                                <button class="btn btn-sm btn-outline-primary" type="submit">Return</button>
+                            </form>
+                        {% else %}
+                            <span class="text-muted small">Complete</span>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center text-muted py-4">No issued books found.</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% if is_paginated %}
+    <nav class="mt-4" aria-label="Issued books pagination">
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+            {% endif %}
+            <li class="page-item active"><span class="page-link">{{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span></li>
+            {% if page_obj.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+{% endif %}
+{% endblock %}

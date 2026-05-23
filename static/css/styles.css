@@ -1,0 +1,18 @@
+body {
+    background: #f5f7fb;
+}
+
+.card {
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
+}
+
+.stat-card h2 {
+    color: #0f172a;
+    font-weight: 700;
+}
+
+.table > :not(caption) > * > * {
+    padding: 0.95rem 1rem;
+}

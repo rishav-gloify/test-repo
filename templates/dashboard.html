@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard | Library Management System{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+    <div>
+        <h1 class="h3 mb-1">Dashboard</h1>
+        <p class="text-muted mb-0">Overview of books, users, and active circulation.</p>
+    </div>
+    <a class="btn btn-primary" href="{% url 'books:list' %}">Browse Books</a>
+</div>
+
+<div class="row g-3">
+    <div class="col-12 col-md-6 col-xl-3">
+        <div class="card stat-card h-100">
+            <div class="card-body">
+                <p class="text-muted text-uppercase small mb-2">Total Books</p>
+                <h2 class="mb-0">{{ total_books }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-6 col-xl-3">
+        <div class="card stat-card h-100">
+            <div class="card-body">
+                <p class="text-muted text-uppercase small mb-2">Issued Books</p>
+                <h2 class="mb-0">{{ issued_books }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-6 col-xl-3">
+        <div class="card stat-card h-100">
+            <div class="card-body">
+                <p class="text-muted text-uppercase small mb-2">Available Copies</p>
+                <h2 class="mb-0">{{ available_books }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-6 col-xl-3">
+        <div class="card stat-card h-100">
+            <div class="card-body">
+                <p class="text-muted text-uppercase small mb-2">Registered Users</p>
+                <h2 class="mb-0">{{ registered_users }}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

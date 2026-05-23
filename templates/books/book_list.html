@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}Books | Library Management System{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+    <div>
+        <h1 class="h3 mb-1">Books</h1>
+        <p class="text-muted mb-0">Search and manage the library catalog.</p>
+    </div>
+    {% if user.is_librarian %}
+        <a class="btn btn-primary" href="{% url 'books:add' %}">Add Book</a>
+    {% endif %}
+</div>
+
+<form class="row g-2 mb-4" method="get">
+    <div class="col-md-10">
+        <input class="form-control" type="search" name="q" value="{{ query }}" placeholder="Search by title, author, category, or ISBN">
+    </div>
+    <div class="col-md-2 d-grid">
+        <button class="btn btn-outline-primary" type="submit">Search</button>
+    </div>
+</form>
+
+<div class="card">
+    <div class="table-responsive">
+        <table class="table align-middle mb-0">
+            <thead class="table-light">
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>ISBN</th>
+                <th>Category</th>
+                <th>Quantity</th>
+                <th>Available</th>
+                <th>Status</th>
+                {% if user.is_librarian %}<th class="text-end">Actions</th>{% endif %}
+            </tr>
+            </thead>
+            <tbody>
+            {% for book in books %}
+                <tr>
+                    <td class="fw-semibold">{{ book.title }}</td>
+                    <td>{{ book.author }}</td>
+                    <td>{{ book.isbn }}</td>
+                    <td>{{ book.category }}</td>
+                    <td>{{ book.quantity }}</td>
+                    <td>{{ book.available_copies }}</td>
+                    <td>
+                        <span class="badge {% if book.availability_status == 'AVAILABLE' %}text-bg-success{% else %}text-bg-secondary{% endif %}">
+                            {{ book.get_availability_status_display }}
+                        </span>
+                    </td>
+                    {% if user.is_librarian %}
+                        <td class="text-end">
+                            <a class="btn btn-sm btn-outline-secondary" href="{% url 'books:edit' book.pk %}">Edit</a>
+                            <a class="btn btn-sm btn-outline-danger" href="{% url 'books:delete' book.pk %}">Delete</a>
+                        </td>
+                    {% endif %}
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="8" class="text-center text-muted py-4">No books found.</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% if is_paginated %}
+    <nav class="mt-4" aria-label="Book pagination">
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+                <li class="page-item"><a class="page-link" href="?q={{ query }}&page={{ page_obj.previous_page_number }}">Previous</a></li>
+            {% endif %}
+            <li class="page-item active"><span class="page-link">{{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span></li>
+            {% if page_obj.has_next %}
+                <li class="page-item"><a class="page-link" href="?q={{ query }}&page={{ page_obj.next_page_number }}">Next</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+{% endif %}
+{% endblock %}
