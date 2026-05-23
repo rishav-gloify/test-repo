@@ -18,6 +18,12 @@ services:
         value: ".onrender.com"
       - key: DJANGO_CSRF_TRUSTED_ORIGINS
         value: "https://*.onrender.com"
+      - key: DJANGO_ADMIN_USERNAME
+        value: admin
+      - key: DJANGO_ADMIN_EMAIL
+        value: admin@example.com
+      - key: DJANGO_ADMIN_PASSWORD
+        sync: false
 
 databases:
   - name: library-management-db

@@ -107,6 +107,18 @@ This repository includes `render.yaml`, `build.sh`, and `start.sh` for Render de
 
 Render free services are useful for demos and reviews, but they are not intended for production traffic.
 
+### Render Admin User
+
+The start script runs `python manage.py create_admin` after migrations. Set these environment variables in Render:
+
+```bash
+DJANGO_ADMIN_USERNAME=admin
+DJANGO_ADMIN_EMAIL=admin@example.com
+DJANGO_ADMIN_PASSWORD=choose-a-strong-password
+```
+
+If you deploy with the included Blueprint for the first time, Render prompts you for `DJANGO_ADMIN_PASSWORD`. For an already-created Render service, add or update these variables from the service's **Environment** page, then redeploy.
+
 ## API Endpoints
 
 All API endpoints require authentication.
